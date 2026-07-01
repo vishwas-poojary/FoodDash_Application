@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FoodDash – Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+        /* ── RESET & BASE ── */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8f8f8;
+            color: #1c1c1c;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ── NAVBAR (matches reference) ── */
+        nav {
+            background: #fff;
+            border-bottom: 1px solid #f0f0f0;
+            padding: 0 2rem;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .nav-logo {
+            font-size: 22px;
+            font-weight: 700;
+            color: #fc4b08;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .nav-logo span {
+            font-size: 26px;
+        }
+
+        .nav-center {
+            flex: 1;
+            max-width: 420px;
+            margin: 0 2rem;
+        }
+
+        .nav-search {
+            display: flex;
+            align-items: center;
+            background: #f5f5f5;
+            border: 1.5px solid #eee;
+            border-radius: 10px;
+            padding: 8px 14px;
+            gap: 8px;
+            transition: border-color 0.2s;
+        }
+        .nav-search:focus-within {
+            border-color: #fc4b08;
+        }
+        .nav-search svg {
+            width: 16px;
+            height: 16px;
+            color: #999;
+            flex-shrink: 0;
+        }
+        .nav-search input {
+            border: none;
+            background: transparent;
+            font-size: 14px;
+            color: #1c1c1c;
+            outline: none;
+            width: 100%;
+            font-family: inherit;
+        }
+        .nav-search input::placeholder {
+            color: #aaa;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .nav-links a {
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            color: #3d3d3d;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: background 0.15s, color 0.15s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .nav-links a:hover {
+            background: #f5f5f5;
+            color: #fc4b08;
+        }
+        .nav-links a.btn-login {
+            background: #fc4b08;
+            color: #fff;
+        }
+        .nav-links a.btn-login:hover {
+            background: #e04007;
+        }
+
+        .nav-profile {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #fc4b08;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            margin-left: 8px;
+            border: 2px solid #ffe5d9;
+        }
+
+        /* ── PAGE HEADER ── */
+        .page-header {
+            background: linear-gradient(135deg, #fff5f0 0%, #fff 60%);
+            padding: 2rem 2rem 1.5rem;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .page-header-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 2rem;
+        }
+
+        .page-header h1 {
+            font-size: 28px;
+            font-weight: 700;
+        }
+        .page-header h1 span {
+            color: #fc4b08;
+        }
+        .page-header p {
+            font-size: 15px;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        .page-header-icon {
+            font-size: 56px;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+
+        /* ── MAIN LAYOUT ── */
+        .main-wrap {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .login-container {
+            max-width: 460px;
+            width: 100%;
+            background: #fff;
+            border-radius: 20px;
+            padding: 2.25rem 2.5rem 2.5rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            border: 1px solid #f0f0f0;
+        }
+
+        .login-container .form-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: #1c1c1c;
+        }
+
+        .login-container .form-sub {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 1.75rem;
+        }
+
+        .login-container .form-sub a {
+            color: #fc4b08;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .login-container .form-sub a:hover {
+            text-decoration: underline;
+        }
+
+        /* ── FORM ELEMENTS ── */
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 5px;
+            letter-spacing: 0.2px;
+        }
+
+        .form-group label .required {
+            color: #fc4b08;
+            margin-left: 2px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 11px 14px;
+            font-size: 14px;
+            font-family: inherit;
+            color: #1c1c1c;
+            background: #f9f9f9;
+            border: 1.5px solid #e8e8e8;
+            border-radius: 10px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: #fc4b08;
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(252, 75, 8, 0.12);
+        }
+
+        .form-group input::placeholder {
+            color: #bbb;
+        }
+
+        /* ── FORGOT PASSWORD LINK ── */
+        .form-options {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-options .remember {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #555;
+            cursor: pointer;
+        }
+
+        .form-options .remember input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: #fc4b08;
+            cursor: pointer;
+        }
+
+        .form-options .forgot-link {
+            font-size: 13px;
+            color: #fc4b08;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .form-options .forgot-link:hover {
+            text-decoration: underline;
+        }
+
+        /* ── SUBMIT BUTTON ── */
+        .btn-submit {
+            width: 100%;
+            padding: 13px;
+            font-size: 16px;
+            font-weight: 600;
+            font-family: inherit;
+            color: #fff;
+            background: #fc4b08;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            margin-top: 6px;
+            letter-spacing: 0.3px;
+        }
+
+        .btn-submit:hover {
+            background: #e04007;
+        }
+
+        .btn-submit:active {
+            transform: scale(0.98);
+        }
+
+        /* ── DIVIDER ── */
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin: 1.5rem 0;
+            color: #bbb;
+            font-size: 13px;
+        }
+        .divider::before,
+        .divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #e8e8e8;
+        }
+
+        /* ── SOCIAL BUTTONS ── */
+        .social-login {
+            display: flex;
+            gap: 12px;
+        }
+
+        .social-login button {
+            flex: 1;
+            padding: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            font-family: inherit;
+            color: #555;
+            background: #f9f9f9;
+            border: 1.5px solid #e8e8e8;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .social-login button:hover {
+            background: #f0f0f0;
+            border-color: #fc4b08;
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            background: #1c1c1c;
+            color: #aaa;
+            text-align: center;
+            padding: 1.5rem;
+            font-size: 13px;
+            margin-top: auto;
+        }
+        footer span {
+            color: #fc4b08;
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 640px) {
+            nav {
+                padding: 0 1rem;
+                flex-wrap: wrap;
+                height: auto;
+                padding-top: 10px;
+                padding-bottom: 10px;
+                gap: 8px;
+            }
+            .nav-center {
+                order: 3;
+                flex: 1 1 100%;
+                margin: 0;
+                max-width: 100%;
+            }
+            .nav-links a {
+                padding: 6px 12px;
+                font-size: 13px;
+            }
+            .nav-logo {
+                font-size: 19px;
+            }
+
+            .page-header-inner {
+                flex-direction: column;
+                text-align: center;
+            }
+            .page-header h1 {
+                font-size: 22px;
+            }
+            .page-header-icon {
+                font-size: 40px;
+            }
+
+            .login-container {
+                padding: 1.5rem 1.25rem;
+            }
+
+            .form-options {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .social-login {
+                flex-direction: column;
+            }
+
+            .hero-img {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 1.25rem 1rem;
+            }
+            .login-container .form-title {
+                font-size: 20px;
+            }
+            .btn-submit {
+                font-size: 15px;
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ─── NAVBAR (exactly matches the reference) ─── -->
+    <nav>
+        <div class="nav-logo"><span>🍽</span> FoodDash</div>
+        <div class="nav-center">
+            <div class="nav-search">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <circle cx="11" cy="11" r="8" />
+                    <path d="m21 21-4.35-4.35" />
+                </svg>
+                <input type="text" placeholder="Search for restaurants, cuisines...">
+            </div>
+        </div>
+        <div class="nav-links">
+            <a href="#">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                </svg>
+                Home
+            </a>
+            <a href="#" class="btn-login">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+                    <polyline points="10 17 15 12 10 7" />
+                    <line x1="15" y1="12" x2="3" y2="12" />
+                </svg>
+                Login
+            </a>
+            <a href="register.html">Sign Up</a>
+        </div>
+        <div class="nav-profile">AK</div>
+    </nav>
+
+    <!-- ─── PAGE HEADER ─── -->
+    <div class="page-header">
+        <div class="page-header-inner">
+            <div>
+                <h1>Welcome back <span>👋</span></h1>
+                <p>Log in to your account and continue ordering.</p>
+            </div>
+            <div class="page-header-icon">🔐</div>
+        </div>
+    </div>
+
+    <!-- ─── LOGIN FORM ─── -->
+    <div class="main-wrap">
+        <div class="login-container">
+
+            <div class="form-title">Log In</div>
+            <div class="form-sub">
+                Don't have an account? <a href="register.html">Sign up</a>
+            </div>
+
+            <form action="callLoginServlet" method="POST">
+
+                <!-- Email -->
+                <div class="form-group">
+                    <label for="email">Email Address <span class="required">*</span></label>
+                    <input type="email" id="email" name="email" placeholder="you@example.com" required />
+                </div>
+
+                <!-- Password -->
+                <div class="form-group">
+                    <label for="password">Password <span class="required">*</span></label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required />
+                </div>
+
+                <!-- Options: Remember me & Forgot password -->
+                <div class="form-options">
+                    <label class="remember">
+                        <input type="checkbox" name="remember" /> Remember me
+                    </label>
+                    <a href="#" class="forgot-link">Forgot password?</a>
+                </div>
+
+                <!-- Submit -->
+                <button type="submit" class="btn-submit">Log In →</button>
+
+            </form>
+
+            <!-- Divider -->
+            <div class="divider">or continue with</div>
+
+            <!-- Social login -->
+            <div class="social-login">
+                <button type="button">🔵 Google</button>
+                <button type="button">⚫ GitHub</button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ─── FOOTER ─── -->
+    <footer>
+        Made with <span>♥</span> by FoodDash &nbsp;·&nbsp; © 2026 FoodDash. All rights reserved.
+    </footer>
+
+</body>
+</html>

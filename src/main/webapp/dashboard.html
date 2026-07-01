@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>NomNom Nexus – Food Delivery</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', 'Inter', system-ui, sans-serif;
+        }
+
+        body {
+            background: #fefaf5;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(8px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .logo h1 {
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, #e67e22, #f39c12);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+        }
+        .user-area {
+            background: #f1f5f9;
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-weight: 500;
+        }
+        .logout-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 0.4rem 1rem;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .logout-btn:hover { background: #c0392b; transform: scale(1.02); }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(145deg, #fff5eb 0%, #ffe8d9 100%);
+            padding: 3rem 2rem;
+            text-align: center;
+            border-radius: 0 0 2rem 2rem;
+            margin-bottom: 2rem;
+        }
+        .hero h1 {
+            font-size: 2.5rem;
+            color: #2d3436;
+            margin-bottom: 1rem;
+        }
+        .hero h1 span {
+            background: linear-gradient(135deg, #e67e22, #f39c12);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .hero p {
+            font-size: 1.1rem;
+            color: #636e72;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 0.2rem;
+            background: white;
+            padding: 0 2rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #f0e6df;
+        }
+        .tab {
+            padding: 1rem 1.8rem;
+            cursor: pointer;
+            font-weight: 600;
+            color: #5a6e7a;
+            border-bottom: 3px solid transparent;
+            transition: 0.2s;
+        }
+        .tab i { margin-right: 8px; }
+        .tab.active {
+            color: #e67e22;
+            border-bottom-color: #e67e22;
+        }
+
+        /* Content */
+        .content {
+            padding: 1rem 2rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Restaurant & Menu Grids */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            border: 1px solid #fdf4ed;
+        }
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.1);
+        }
+        .card-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+        .card:hover .card-img {
+            transform: scale(1.02);
+        }
+        .card-body {
+            padding: 1.2rem;
+        }
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+            color: #1e293b;
+        }
+        .card-text {
+            color: #5a6e7a;
+            font-size: 0.85rem;
+            margin: 0.4rem 0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .price {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #e67e22;
+            margin: 0.6rem 0;
+        }
+        .add-btn {
+            background: linear-gradient(135deg, #e67e22, #f39c12);
+            color: white;
+            border: none;
+            padding: 0.6rem;
+            border-radius: 40px;
+            width: 100%;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+        .add-btn:hover { opacity: 0.92; transform: translateY(-1px); }
+        .back-btn {
+            background: #94a3b8;
+            border: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+            color: white;
+            cursor: pointer;
+            margin-bottom: 1rem;
+            transition: 0.2s;
+        }
+        .back-btn:hover { background: #6c7a8e; }
+
+        /* Cart Table */
+        .cart-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+        }
+        .cart-table th, .cart-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #f0e6df;
+        }
+        .cart-table th {
+            background: #fef8f2;
+            font-weight: 600;
+        }
+        .total {
+            text-align: right;
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-top: 1.5rem;
+        }
+        .place-order {
+            background: #2ecc71;
+            float: right;
+            margin-top: 1rem;
+            padding: 0.7rem 1.8rem;
+            border-radius: 40px;
+        }
+        button {
+            background: #e67e22;
+            color: white;
+            border: none;
+            padding: 0.4rem 0.8rem;
+            border-radius: 30px;
+            cursor: pointer;
+        }
+        @media (max-width: 768px) {
+            .tabs { overflow-x: auto; padding: 0 1rem; }
+            .grid { grid-template-columns: 1fr; }
+            .content { padding: 1rem; }
+            .hero h1 { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <div class="logo"><h1><i class="fas fa-utensils"></i> NomNom Nexus</h1></div>
+    <div class="user-area" id="userArea">
+        <span><i class="fas fa-user-circle"></i> <span id="userNameSpan">Foodie</span></span>
+        <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+    </div>
+</div>
+
+<div class="hero">
+    <h1>Craving something <span>delicious</span>?</h1>
+    <p>Order from the best restaurants in town. Fresh food, fast delivery.</p>
+</div>
+
+<div class="tabs" id="tabs">
+    <div class="tab active" data-view="restaurants"><i class="fas fa-store"></i> Restaurants</div>
+    <div class="tab" data-view="cart"><i class="fas fa-shopping-cart"></i> Cart</div>
+    <div class="tab" data-view="orders"><i class="fas fa-history"></i> Orders</div>
+</div>
+
+<div class="content" id="content">
+    <div id="restaurantsView">
+        <div id="restaurantsList" class="grid"></div>
+    </div>
+    <div id="cartView" style="display:none;"><div id="cartContent"></div></div>
+    <div id="ordersView" style="display:none;"><div id="ordersList" class="grid"></div></div>
+</div>
+
+<script>
+    const API_BASE = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'));
+    console.log("API_BASE:", API_BASE);
+
+    async function apiCall(url, method='GET', body=null) {
+        let opts = { method, credentials: 'include', headers: {} };
+        if (body && method === 'POST') {
+            opts.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+            opts.body = body;
+        }
+        let res = await fetch(API_BASE + url, opts);
+        return res.json();
+    }
+
+    function showMessage(msg, isError = false) {
+        let div = document.createElement('div');
+        div.innerText = msg;
+        div.style.position = 'fixed';
+        div.style.bottom = '20px';
+        div.style.right = '20px';
+        div.style.backgroundColor = isError ? '#e74c3c' : '#2ecc71';
+        div.style.color = 'white';
+        div.style.padding = '12px 24px';
+        div.style.borderRadius = '40px';
+        div.style.zIndex = '1000';
+        div.style.boxShadow = '0 4px 15px rgba(0,0,0,0.1)';
+        document.body.appendChild(div);
+        setTimeout(() => div.remove(), 3000);
+    }
+
+    // Menu food images (real photos)
+    const foodImageMap = {
+        pizza: "https://images.pexels.com/photos/825661/pexels-photo-825661.jpeg?auto=compress&cs=tinysrgb&w=600",
+        burger: "https://images.pexels.com/photos/1639557/pexels-photo-1639557.jpeg?auto=compress&cs=tinysrgb&w=600",
+        biryani: "https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=600",
+        pasta: "https://images.pexels.com/photos/1279330/pexels-photo-1279330.jpeg?auto=compress&cs=tinysrgb&w=600",
+        chicken: "https://images.pexels.com/photos/60616/fried-chicken-chicken-fried-crunchy-60616.jpeg?auto=compress&cs=tinysrgb&w=600",
+        fries: "https://images.pexels.com/photos/1583884/pexels-photo-1583884.jpeg?auto=compress&cs=tinysrgb&w=600",
+        salad: "https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=600",
+        dessert: "https://images.pexels.com/photos/1028714/pexels-photo-1028714.jpeg?auto=compress&cs=tinysrgb&w=600",
+        default: "https://images.pexels.com/photos/1279330/pexels-photo-1279330.jpeg?auto=compress&cs=tinysrgb&w=600"
+    };
+
+    // UNIQUE restaurant images – each restaurant gets a different real photo
+    const restaurantImageMap = {
+        "Pizza Hut": "https://images.pexels.com/photos/260922/pexels-photo-260922.jpeg?auto=compress&cs=tinysrgb&w=600",
+        "Burger King": "https://images.pexels.com/photos/67468/pexels-photo-67468.jpeg?auto=compress&cs=tinysrgb&w=600",
+        "Udupi Palace": "https://images.pexels.com/photos/1639557/pexels-photo-1639557.jpeg?auto=compress&cs=tinysrgb&w=600",
+        "Chinese Wok": "https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=600",
+        "Dominos": "https://images.pexels.com/photos/1279330/pexels-photo-1279330.jpeg?auto=compress&cs=tinysrgb&w=600",
+        "KFC": "https://images.pexels.com/photos/60616/fried-chicken-chicken-fried-crunchy-60616.jpeg?auto=compress&cs=tinysrgb&w=600",
+    };
+    const fallbackRestaurantImage = "https://images.pexels.com/photos/260922/pexels-photo-260922.jpeg?auto=compress&cs=tinysrgb&w=600";
+
+    function getMenuImage(itemName) {
+        let lower = itemName.toLowerCase();
+        for (let key in foodImageMap) {
+            if (lower.includes(key)) return foodImageMap[key];
+        }
+        return foodImageMap.default;
+    }
+
+    async function loadRestaurants() {
+        let data = await apiCall('/restaurants');
+        let container = document.getElementById('restaurantsList');
+        container.innerHTML = '';
+        if (Array.isArray(data) && data.length) {
+            data.forEach(r => {
+                let imgUrl = restaurantImageMap[r.name] || fallbackRestaurantImage;
+                let card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <img class="card-img" src="${imgUrl}" alt="${escapeHtml(r.name)}" onerror="this.src='${fallbackRestaurantImage}'">
+                    <div class="card-body">
+                        <div class="card-title">${escapeHtml(r.name)}</div>
+                        <div class="card-text"><i class="fas fa-utensils"></i> ${escapeHtml(r.cuisineType || 'Multi-cuisine')}</div>
+                        <div class="card-text"><i class="fas fa-star"></i> ${r.rating || 'New'}</div>
+                        <div class="card-text"><i class="fas fa-clock"></i> ${r.deliveryTime} mins</div>
+                        <div class="card-text"><i class="fas fa-map-marker-alt"></i> ${escapeHtml(r.address)}</div>
+                    </div>
+                `;
+                card.onclick = () => showMenu(r.restaurantId, r.name);
+                container.appendChild(card);
+            });
+        } else {
+            container.innerHTML = '<p>No restaurants found. Add some via database.</p>';
+        }
+    }
+
+    async function showMenu(restId, restName) {
+        let data = await apiCall(`/menu?restaurantId=${restId}`);
+        let container = document.getElementById('restaurantsView');
+        let menuHtml = `<button class="back-btn" id="backBtn"><i class="fas fa-arrow-left"></i> Back to Restaurants</button>
+                        <h2 style="margin: 0.5rem 0 1rem 0;"><i class="fas fa-utensils"></i> ${escapeHtml(restName)} Menu</h2>
+                        <div id="menuGrid" class="grid"></div>`;
+        let menuDiv = document.createElement('div'); menuDiv.id = 'menuView'; menuDiv.innerHTML = menuHtml;
+        container.parentNode.insertBefore(menuDiv, container.nextSibling);
+        container.style.display = 'none';
+
+        let menuGrid = document.getElementById('menuGrid');
+        menuGrid.innerHTML = '';
+        if (Array.isArray(data) && data.length) {
+            data.forEach(m => {
+                let imgUrl = getMenuImage(m.itemName);
+                let card = document.createElement('div'); card.className = 'card';
+                card.innerHTML = `
+                    <img class="card-img" src="${imgUrl}" alt="${escapeHtml(m.itemName)}" onerror="this.src='${foodImageMap.default}'">
+                    <div class="card-body">
+                        <div class="card-title">${escapeHtml(m.itemName)}</div>
+                        <div class="card-text">${escapeHtml(m.description || 'Delicious dish')}</div>
+                        <div class="price">₹${m.price}</div>
+                        <div class="card-text"><i class="fas fa-boxes"></i> In stock: ${m.stock}</div>
+                        <button class="add-btn" data-id="${m.menuId}"><i class="fas fa-cart-plus"></i> Add to Cart</button>
+                    </div>
+                `;
+                menuGrid.appendChild(card);
+            });
+            document.querySelectorAll('.add-btn').forEach(btn => {
+                btn.addEventListener('click', async (e) => {
+                    e.stopPropagation();
+                    let menuId = btn.dataset.id;
+                    let qty = prompt('Enter quantity:', '1');
+                    if (qty && !isNaN(qty) && parseInt(qty) > 0) {
+                        let result = await apiCall('/cart', 'POST', `action=add&menuId=${menuId}&quantity=${qty}`);
+                        if (result.success) showMessage('Added to cart!');
+                        else showMessage(result.message, true);
+                    }
+                });
+            });
+        } else {
+            menuGrid.innerHTML = '<p>No menu items available for this restaurant.</p>';
+        }
+        document.getElementById('backBtn').onclick = () => {
+            menuDiv.remove();
+            container.style.display = 'block';
+        };
+    }
+
+    async function loadCart() {
+        let data = await apiCall('/cart');
+        let container = document.getElementById('cartContent');
+        if (Array.isArray(data) && data.length) {
+            let html = '<table class="cart-table"><thead><tr><th>Item</th><th>Price</th><th>Qty</th><th>Total</th><th></th></tr></thead><tbody>';
+            let total = 0;
+            for (let item of data) {
+                let itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                html += `<tr>
+                    <td><i class="fas fa-hamburger"></i> ${escapeHtml(item.itemName)}</td>
+                    <td>₹${item.price}</td>
+                    <td>${item.quantity}</td>
+                    <td>₹${itemTotal}</td>
+                    <td class="cart-actions">
+                        <button class="update-btn" data-id="${item.cartId}" data-qty="${item.quantity}"><i class="fas fa-edit"></i> Update</button>
+                        <button class="remove-btn" data-id="${item.cartId}"><i class="fas fa-trash"></i> Remove</button>
+                    </td>
+                </tr>`;
+            }
+            html += `</tbody><tr><div class="total">Total: ₹${total}</div><button id="placeOrderBtn" class="place-order"><i class="fas fa-credit-card"></i> Place Order</button>`;
+            container.innerHTML = html;
+            document.querySelectorAll('.update-btn').forEach(btn => {
+                btn.onclick = async () => {
+                    let newQty = prompt('New quantity:', btn.dataset.qty);
+                    if (newQty && !isNaN(newQty) && parseInt(newQty) > 0) {
+                        let res = await apiCall('/cart', 'POST', `action=update&cartId=${btn.dataset.id}&quantity=${newQty}`);
+                        if (res.success) loadCart();
+                        else showMessage(res.message, true);
+                    }
+                };
+            });
+            document.querySelectorAll('.remove-btn').forEach(btn => {
+                btn.onclick = async () => {
+                    let res = await apiCall('/cart', 'POST', `action=remove&cartId=${btn.dataset.id}`);
+                    if (res.success) loadCart();
+                    else showMessage(res.message, true);
+                };
+            });
+            document.getElementById('placeOrderBtn').onclick = async () => {
+                let restId = prompt('Enter Restaurant ID to order from:');
+                let payment = prompt('Payment method (COD/CARD):', 'COD');
+                let addr = prompt('Delivery address:');
+                if (restId && payment && addr) {
+                    let res = await apiCall('/orders', 'POST', `restaurantId=${restId}&paymentMethod=${payment}&deliveryAddress=${addr}`);
+                    if (res.success) {
+                        showMessage(`Order placed! Order ID: ${res.orderId}`);
+                        loadCart();
+                        loadOrders();
+                    } else {
+                        showMessage(res.message, true);
+                    }
+                }
+            };
+        } else {
+            container.innerHTML = '<p>Your cart is empty. <i class="fas fa-sad-tear"></i> Add items from restaurant menus.</p>';
+        }
+    }
+
+    async function loadOrders() {
+        let data = await apiCall('/orders');
+        let container = document.getElementById('ordersList');
+        container.innerHTML = '';
+        if (Array.isArray(data) && data.length) {
+            data.forEach(o => {
+                let card = document.createElement('div'); card.className = 'card';
+                card.innerHTML = `
+                    <div class="card-body">
+                        <div class="card-title">Order #${o.orderId}</div>
+                        <div class="card-text"><i class="fas fa-store"></i> Restaurant ${o.restaurantId}</div>
+                        <div class="card-text"><i class="fas fa-calendar"></i> ${new Date(o.orderDate).toLocaleString()}</div>
+                        <div class="price">₹${o.totalAmount}</div>
+                        <div class="card-text"><i class="fas fa-truck"></i> Status: <strong>${escapeHtml(o.status)}</strong></div>
+                        <div class="card-text"><i class="fas fa-credit-card"></i> ${escapeHtml(o.paymentMethod)}</div>
+                        <div class="card-text"><i class="fas fa-map-marker-alt"></i> ${escapeHtml(o.deliveryAddress)}</div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        } else {
+            container.innerHTML = '<p>No orders yet. Time to order something delicious!</p>';
+        }
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    // Tab switching
+    document.querySelectorAll('.tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            let view = tab.dataset.view;
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            document.getElementById('restaurantsView').style.display = view === 'restaurants' ? 'block' : 'none';
+            document.getElementById('cartView').style.display = view === 'cart' ? 'block' : 'none';
+            document.getElementById('ordersView').style.display = view === 'orders' ? 'block' : 'none';
+            if (view === 'cart') loadCart();
+            if (view === 'orders') loadOrders();
+            if (view === 'restaurants') loadRestaurants();
+        });
+    });
+
+    document.getElementById('logoutBtn').onclick = async () => {
+        await apiCall('/logout', 'POST');
+        window.location.href = API_BASE + '/index.html';
+    };
+
+    loadRestaurants();
+</script>
+</body>
+</html>

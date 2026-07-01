@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FoodDash – Sign Up</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+        /* ── RESET & BASE ── */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8f8f8;
+            color: #1c1c1c;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ── NAVBAR (matches reference) ── */
+        nav {
+            background: #fff;
+            border-bottom: 1px solid #f0f0f0;
+            padding: 0 2rem;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .nav-logo {
+            font-size: 22px;
+            font-weight: 700;
+            color: #fc4b08;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .nav-logo span {
+            font-size: 26px;
+        }
+
+        .nav-center {
+            flex: 1;
+            max-width: 420px;
+            margin: 0 2rem;
+        }
+
+        .nav-search {
+            display: flex;
+            align-items: center;
+            background: #f5f5f5;
+            border: 1.5px solid #eee;
+            border-radius: 10px;
+            padding: 8px 14px;
+            gap: 8px;
+            transition: border-color 0.2s;
+        }
+        .nav-search:focus-within {
+            border-color: #fc4b08;
+        }
+        .nav-search svg {
+            width: 16px;
+            height: 16px;
+            color: #999;
+            flex-shrink: 0;
+        }
+        .nav-search input {
+            border: none;
+            background: transparent;
+            font-size: 14px;
+            color: #1c1c1c;
+            outline: none;
+            width: 100%;
+            font-family: inherit;
+        }
+        .nav-search input::placeholder {
+            color: #aaa;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .nav-links a {
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            color: #3d3d3d;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: background 0.15s, color 0.15s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .nav-links a:hover {
+            background: #f5f5f5;
+            color: #fc4b08;
+        }
+        .nav-links a.btn-signup {
+            background: #fc4b08;
+            color: #fff;
+        }
+        .nav-links a.btn-signup:hover {
+            background: #e04007;
+        }
+
+        .nav-profile {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #fc4b08;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            margin-left: 8px;
+            border: 2px solid #ffe5d9;
+        }
+
+        /* ── PAGE HEADER ── */
+        .page-header {
+            background: linear-gradient(135deg, #fff5f0 0%, #fff 60%);
+            padding: 2rem 2rem 1.5rem;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .page-header-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 2rem;
+        }
+
+        .page-header h1 {
+            font-size: 28px;
+            font-weight: 700;
+        }
+        .page-header h1 span {
+            color: #fc4b08;
+        }
+        .page-header p {
+            font-size: 15px;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        .page-header-icon {
+            font-size: 56px;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+
+        /* ── MAIN LAYOUT ── */
+        .main-wrap {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .register-container {
+            max-width: 520px;
+            width: 100%;
+            background: #fff;
+            border-radius: 20px;
+            padding: 2.25rem 2.5rem 2.5rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            border: 1px solid #f0f0f0;
+        }
+
+        .register-container .form-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: #1c1c1c;
+        }
+
+        .register-container .form-sub {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 1.75rem;
+        }
+
+        .register-container .form-sub a {
+            color: #fc4b08;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .register-container .form-sub a:hover {
+            text-decoration: underline;
+        }
+
+        /* ── FORM ELEMENTS ── */
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 5px;
+            letter-spacing: 0.2px;
+        }
+
+        .form-group label .required {
+            color: #fc4b08;
+            margin-left: 2px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 11px 14px;
+            font-size: 14px;
+            font-family: inherit;
+            color: #1c1c1c;
+            background: #f9f9f9;
+            border: 1.5px solid #e8e8e8;
+            border-radius: 10px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #fc4b08;
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(252, 75, 8, 0.12);
+        }
+
+        .form-group input::placeholder {
+            color: #bbb;
+        }
+
+        .form-group select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23999' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            padding-right: 36px;
+            cursor: pointer;
+        }
+
+        .form-group select option {
+            padding: 6px;
+        }
+
+        /* inline row for name fields */
+        .form-row {
+            display: flex;
+            gap: 14px;
+        }
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        /* ── PASSWORD HINT ── */
+        .password-hint {
+            font-size: 12px;
+            color: #999;
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .password-hint svg {
+            width: 14px;
+            height: 14px;
+            flex-shrink: 0;
+            color: #bbb;
+        }
+
+        /* ── ROLE RADIOS (custom) ── */
+        .role-options {
+            display: flex;
+            gap: 12px;
+            margin-top: 4px;
+        }
+
+        .role-options label {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 12px;
+            border: 1.5px solid #e8e8e8;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #555;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: #f9f9f9;
+            font-family: inherit;
+        }
+
+        .role-options label:hover {
+            border-color: #fc4b08;
+            background: #fff5f0;
+        }
+
+        .role-options input[type="radio"] {
+            display: none;
+        }
+
+        .role-options input[type="radio"]:checked+label {
+            border-color: #fc4b08;
+            background: #fff0e8;
+            color: #fc4b08;
+            box-shadow: 0 0 0 3px rgba(252, 75, 8, 0.10);
+        }
+
+        /* ── SUBMIT BUTTON ── */
+        .btn-submit {
+            width: 100%;
+            padding: 13px;
+            font-size: 16px;
+            font-weight: 600;
+            font-family: inherit;
+            color: #fff;
+            background: #fc4b08;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            margin-top: 6px;
+            letter-spacing: 0.3px;
+        }
+
+        .btn-submit:hover {
+            background: #e04007;
+        }
+
+        .btn-submit:active {
+            transform: scale(0.98);
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            background: #1c1c1c;
+            color: #aaa;
+            text-align: center;
+            padding: 1.5rem;
+            font-size: 13px;
+            margin-top: auto;
+        }
+        footer span {
+            color: #fc4b08;
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 640px) {
+            nav {
+                padding: 0 1rem;
+                flex-wrap: wrap;
+                height: auto;
+                padding-top: 10px;
+                padding-bottom: 10px;
+                gap: 8px;
+            }
+            .nav-center {
+                order: 3;
+                flex: 1 1 100%;
+                margin: 0;
+                max-width: 100%;
+            }
+            .nav-links a {
+                padding: 6px 12px;
+                font-size: 13px;
+            }
+            .nav-logo {
+                font-size: 19px;
+            }
+
+            .page-header-inner {
+                flex-direction: column;
+                text-align: center;
+            }
+            .page-header h1 {
+                font-size: 22px;
+            }
+            .page-header-icon {
+                font-size: 40px;
+            }
+
+            .register-container {
+                padding: 1.5rem 1.25rem;
+            }
+
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+
+            .role-options {
+                flex-direction: column;
+            }
+
+            .hero-img {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .register-container {
+                padding: 1.25rem 1rem;
+            }
+            .register-container .form-title {
+                font-size: 19px;
+            }
+            .btn-submit {
+                font-size: 15px;
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ─── NAVBAR (exactly matches the reference) ─── -->
+    <nav>
+        <div class="nav-logo"><span>🍽</span> FoodDash</div>
+        <div class="nav-center">
+            <div class="nav-search">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <circle cx="11" cy="11" r="8" />
+                    <path d="m21 21-4.35-4.35" />
+                </svg>
+                <input type="text" placeholder="Search for restaurants, cuisines...">
+            </div>
+        </div>
+        <div class="nav-links">
+            <a href="#">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                </svg>
+                Home
+            </a>
+            <a href="login.html">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+                    <polyline points="10 17 15 12 10 7" />
+                    <line x1="15" y1="12" x2="3" y2="12" />
+                </svg>
+                Login
+            </a>
+            <a href="#" class="btn-signup">Sign Up</a>
+        </div>
+        <div class="nav-profile">AK</div>
+    </nav>
+
+    <!-- ─── PAGE HEADER ─── -->
+    <div class="page-header">
+        <div class="page-header-inner">
+            <div>
+                <h1>Create your <span>account</span></h1>
+                <p>Join FoodDash and start ordering from the best restaurants.</p>
+            </div>
+            <div class="page-header-icon">📝</div>
+        </div>
+    </div>
+
+    <!-- ─── REGISTRATION FORM ─── -->
+    <div class="main-wrap">
+        <div class="register-container">
+
+            <div class="form-title">Sign Up</div>
+            <div class="form-sub">
+                Already have an account? <a href="login.html">Log in</a>
+            </div>
+
+            <form action="callRegisterServlet" method="POST">
+
+                <!-- Full Name -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">First Name <span class="required">*</span></label>
+                        <input type="text" id="firstName" name="firstName" placeholder="e.g. Aryan" required />
+                    </div>
+                   
+                </div>
+
+                <!-- Email -->
+                <div class="form-group">
+                    <label for="email">Email Address <span class="required">*</span></label>
+                    <input type="email" id="email" name="email" placeholder="you@example.com" required />
+                </div>
+
+                <!-- Password -->
+                <div class="form-group">
+                    <label for="password">Password <span class="required">*</span></label>
+                    <input type="password" id="password" name="password" placeholder="Min 8 characters" required />
+                    <div class="password-hint">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                        </svg>
+                        Use at least 8 characters with a mix of letters &amp; numbers
+                    </div>
+                </div>
+
+                <!-- Address -->
+                <div class="form-group">
+                    <label for="address">Delivery Address <span class="required">*</span></label>
+                    <input type="text" id="address" name="address" placeholder="Street, city, landmark" required />
+                </div>
+
+                <!-- Role -->
+                <div class="form-group">
+                    <label>I am a <span class="required">*</span></label>
+                    <div class="role-options">
+                        <input type="radio" name="role" id="roleCustomer" value="customer" checked />
+                        <label for="roleCustomer">🍽️ Customer</label>
+
+                        <input type="radio" name="role" id="roleRestaurant" value="restaurant" />
+                        <label for="roleRestaurant">🏪 Restaurant</label>
+
+                        <input type="radio" name="role" id="roleDelivery" value="delivery" />
+                        <label for="roleDelivery">🛵 Delivery</label>
+                    </div>
+                </div>
+
+                <!-- Submit -->
+                <button type="submit" class="btn-submit">Create Account →</button>
+
+            </form>
+
+        </div>
+    </div>
+
+    <!-- ─── FOOTER ─── -->
+    <footer>
+        Made with <span>♥</span> by FoodDash &nbsp;·&nbsp; © 2026 FoodDash. All rights reserved.
+    </footer>
+
+</body>
+</html>

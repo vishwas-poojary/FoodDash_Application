@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spice Garden – Menu | FoodDash</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  /* ── RESET & BASE ── */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', sans-serif; background: #f8f8f8; color: #1c1c1c; }
+
+  /* ── NAVBAR ── */
+  nav {
+    background: #fff;
+    border-bottom: 1px solid #f0f0f0;
+    padding: 0 2rem;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .nav-logo {
+    font-size: 22px; font-weight: 700; color: #fc4b08;
+    letter-spacing: -0.5px; display: flex; align-items: center; gap: 8px;
+    text-decoration: none;
+  }
+  .nav-logo span { font-size: 26px; }
+  .nav-back {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 14px; font-weight: 500; color: #3d3d3d;
+    text-decoration: none; padding: 8px 14px;
+    border-radius: 8px; transition: background 0.15s;
+  }
+  .nav-back:hover { background: #f5f5f5; color: #fc4b08; }
+  .nav-back svg { width: 16px; height: 16px; }
+  .nav-cart-btn {
+    display: flex; align-items: center; gap: 8px;
+    background: #fc4b08; color: #fff;
+    font-size: 14px; font-weight: 600;
+    padding: 10px 20px; border-radius: 10px;
+    border: none; cursor: pointer; transition: background 0.15s;
+    position: relative;
+  }
+  .nav-cart-btn:hover { background: #e04007; }
+  .nav-cart-btn svg { width: 16px; height: 16px; }
+  .cart-count {
+    background: #fff; color: #fc4b08;
+    font-size: 11px; font-weight: 700;
+    width: 20px; height: 20px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* ── RESTAURANT HERO BANNER ── */
+  .restaurant-banner {
+    background: #fff;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .banner-img-wrap {
+    width: 100%; height: 260px; overflow: hidden; position: relative;
+    background: linear-gradient(135deg, #ffe5d9, #fff5f0);
+  }
+  .banner-img-wrap img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+    filter: brightness(0.75);
+  }
+  .banner-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 55%);
+    display: flex; align-items: flex-end;
+    padding: 1.5rem 2rem;
+  }
+  .banner-info { color: #fff; max-width: 1200px; width: 100%; margin: 0 auto; }
+  .banner-info h1 { font-size: 30px; font-weight: 700; margin-bottom: 4px; }
+  .banner-cuisine { font-size: 14px; opacity: 0.85; margin-bottom: 10px; }
+  .banner-meta { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .bmeta-item {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 13px; font-weight: 500;
+  }
+  .bmeta-item svg { width: 14px; height: 14px; }
+  .banner-rating {
+    display: flex; align-items: center; gap: 5px;
+    background: #48c479; color: #fff;
+    font-size: 13px; font-weight: 700;
+    padding: 4px 10px; border-radius: 6px;
+  }
+  .banner-open-badge {
+    background: rgba(255,255,255,0.15); backdrop-filter: blur(4px);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: #fff; font-size: 12px; font-weight: 600;
+    padding: 4px 10px; border-radius: 20px;
+  }
+  .banner-open-badge.open { color: #6ddc9a; border-color: #6ddc9a; }
+
+  /* ── STICKY CATEGORY NAV ── */
+  .cat-nav {
+    background: #fff;
+    border-bottom: 1px solid #f0f0f0;
+    padding: 0 2rem;
+    display: flex; align-items: center; gap: 4px;
+    overflow-x: auto; scrollbar-width: none;
+    position: sticky; top: 64px; z-index: 90;
+  }
+  .cat-nav::-webkit-scrollbar { display: none; }
+  .cat-nav-item {
+    white-space: nowrap; font-size: 13px; font-weight: 500;
+    padding: 14px 18px; border-bottom: 2.5px solid transparent;
+    cursor: pointer; color: #666; transition: all 0.15s;
+    text-decoration: none; display: block;
+  }
+  .cat-nav-item:hover { color: #fc4b08; }
+  .cat-nav-item.active { color: #fc4b08; border-bottom-color: #fc4b08; }
+
+  /* ── LAYOUT ── */
+  .page-layout {
+    max-width: 1200px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 340px;
+    gap: 24px; padding: 2rem;
+    align-items: start;
+  }
+  @media (max-width: 900px) {
+    .page-layout { grid-template-columns: 1fr; }
+    .cart-panel { display: none; }
+  }
+
+  /* ── MENU SECTION ── */
+  .menu-section { margin-bottom: 2.5rem; }
+  .menu-section-title {
+    font-size: 18px; font-weight: 700; color: #1c1c1c;
+    margin-bottom: 1rem; padding-bottom: 10px;
+    border-bottom: 2px solid #f0f0f0;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .menu-section-title span { font-size: 22px; }
+  .section-count {
+    font-size: 12px; font-weight: 500; color: #999;
+    background: #f5f5f5; padding: 2px 8px; border-radius: 20px;
+  }
+
+  /* ── MENU ITEM CARD ── */
+  .menu-item {
+    background: #fff; border-radius: 14px;
+    border: 1px solid #f0f0f0;
+    display: flex; gap: 0;
+    margin-bottom: 14px; overflow: hidden;
+    transition: box-shadow 0.2s, transform 0.2s;
+    position: relative;
+  }
+  .menu-item:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.09); transform: translateY(-2px); }
+  .menu-item-body { flex: 1; padding: 16px 16px 16px 18px; display: flex; flex-direction: column; justify-content: space-between; min-width: 0; }
+  .menu-item-top { margin-bottom: 8px; }
+  .veg-badge {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 18px; height: 18px; border-radius: 3px; margin-bottom: 6px;
+    border: 1.5px solid;
+  }
+  .veg-badge.veg { border-color: #0f8a0f; }
+  .veg-badge.veg::after { content: ''; width: 8px; height: 8px; background: #0f8a0f; border-radius: 50%; display: block; }
+  .veg-badge.non-veg { border-color: #c0392b; }
+  .veg-badge.non-veg::after { content: '▲'; font-size: 8px; color: #c0392b; line-height: 1; }
+  .menu-item-name {
+    font-size: 15px; font-weight: 600; color: #1c1c1c;
+    margin-bottom: 4px; line-height: 1.3;
+  }
+  .menu-item-desc {
+    font-size: 12px; color: #888; line-height: 1.5;
+    display: -webkit-box; -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .menu-item-bottom {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: 12px;
+  }
+  .menu-item-price { font-size: 15px; font-weight: 700; color: #1c1c1c; }
+  .menu-item-rating {
+    display: flex; align-items: center; gap: 4px;
+    font-size: 11px; font-weight: 600; color: #48c479;
+  }
+  .menu-item-rating svg { width: 11px; height: 11px; fill: #48c479; }
+  .bestseller-tag {
+    display: inline-block; background: #fff5e0; color: #c07000;
+    font-size: 10px; font-weight: 700; letter-spacing: 0.4px;
+    padding: 2px 7px; border-radius: 4px;
+    border: 1px solid #f0d080; margin-bottom: 5px; text-transform: uppercase;
+  }
+  .spicy-tag {
+    display: inline-block; background: #fff0f0; color: #d63031;
+    font-size: 10px; font-weight: 700; letter-spacing: 0.4px;
+    padding: 2px 7px; border-radius: 4px;
+    border: 1px solid #ffb8b8; margin-bottom: 5px; text-transform: uppercase;
+    margin-left: 4px;
+  }
+
+  /* ── MENU ITEM IMAGE + ADD BTN ── */
+  .menu-item-img-wrap {
+    position: relative; flex-shrink: 0;
+    width: 140px; height: 140px; align-self: center;
+    margin: 12px 12px 12px 0;
+  }
+  .menu-item-img-wrap img {
+    width: 100%; height: 100%; object-fit: cover;
+    border-radius: 10px; display: block;
+  }
+  .menu-item-img-placeholder {
+    width: 100%; height: 100%; border-radius: 10px;
+    background: linear-gradient(135deg, #fff5f0, #ffe5d9);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 42px;
+  }
+  .add-btn {
+    position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%);
+    background: #fff; color: #fc4b08;
+    font-size: 13px; font-weight: 700; letter-spacing: 0.3px;
+    border: 1.5px solid #fc4b08; border-radius: 8px;
+    padding: 6px 22px; cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    white-space: nowrap; box-shadow: 0 2px 8px rgba(252,75,8,0.12);
+  }
+  .add-btn:hover { background: #fc4b08; color: #fff; }
+
+  /* qty control (shown after add) */
+  .qty-control {
+    position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%);
+    display: flex; align-items: center; gap: 0;
+    background: #fc4b08; border-radius: 8px;
+    overflow: hidden; box-shadow: 0 2px 8px rgba(252,75,8,0.25);
+    display: none; /* shown via JS if needed; static demo shows add-btn */
+  }
+  .qty-btn {
+    background: none; border: none; color: #fff;
+    font-size: 18px; font-weight: 700; width: 32px; height: 32px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+  }
+  .qty-num { color: #fff; font-size: 14px; font-weight: 700; min-width: 20px; text-align: center; }
+
+  /* ── CART PANEL ── */
+  .cart-panel {
+    background: #fff; border-radius: 16px;
+    border: 1px solid #f0f0f0;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    position: sticky; top: 116px;
+    overflow: hidden;
+  }
+  .cart-header {
+    padding: 16px 18px;
+    border-bottom: 1px solid #f0f0f0;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .cart-header h3 { font-size: 16px; font-weight: 700; }
+  .cart-restaurant { font-size: 12px; color: #888; }
+  .cart-empty {
+    padding: 2.5rem 1rem; text-align: center;
+  }
+  .cart-empty-icon { font-size: 44px; margin-bottom: 10px; }
+  .cart-empty p { font-size: 13px; color: #999; line-height: 1.5; }
+  .cart-items { padding: 12px 18px; }
+  .cart-item {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 10px; padding: 10px 0; border-bottom: 1px dashed #f0f0f0;
+  }
+  .cart-item:last-child { border-bottom: none; }
+  .cart-item-name { font-size: 13px; font-weight: 500; flex: 1; }
+  .cart-item-qty {
+    display: flex; align-items: center; gap: 8px;
+    background: #fff5f0; border-radius: 6px; padding: 3px 8px;
+  }
+  .cq-btn { background: none; border: none; color: #fc4b08; font-size: 16px; font-weight: 700; cursor: pointer; line-height: 1; }
+  .cq-num { font-size: 13px; font-weight: 600; color: #1c1c1c; min-width: 14px; text-align: center; }
+  .cart-item-price { font-size: 13px; font-weight: 600; color: #1c1c1c; white-space: nowrap; }
+  .cart-summary {
+    padding: 12px 18px;
+    border-top: 1px solid #f0f0f0;
+    background: #fafafa;
+  }
+  .summary-row {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 13px; color: #555; margin-bottom: 6px;
+  }
+  .summary-row.total { font-size: 15px; font-weight: 700; color: #1c1c1c; margin-top: 8px; padding-top: 8px; border-top: 1px dashed #e8e8e8; margin-bottom: 0; }
+  .checkout-btn {
+    display: block; width: calc(100% - 36px); margin: 14px 18px;
+    background: #fc4b08; color: #fff;
+    font-size: 15px; font-weight: 700;
+    border: none; border-radius: 12px;
+    padding: 14px; cursor: pointer; text-align: center;
+    transition: background 0.15s;
+  }
+  .checkout-btn:hover { background: #e04007; }
+
+  /* ── CUSTOMISATION MODAL HINT ── */
+  .custom-note {
+    font-size: 10px; color: #bbb; text-align: center;
+    padding: 0 18px 14px; line-height: 1.4;
+  }
+
+  /* ── SEARCH BAR in menu ── */
+  .menu-search-wrap {
+    margin-bottom: 1.5rem;
+  }
+  .menu-search {
+    display: flex; align-items: center; gap: 10px;
+    background: #fff; border: 1.5px solid #eee;
+    border-radius: 12px; padding: 11px 16px;
+    transition: border-color 0.2s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .menu-search:focus-within { border-color: #fc4b08; }
+  .menu-search svg { width: 16px; height: 16px; color: #999; flex-shrink: 0; }
+  .menu-search input {
+    border: none; background: transparent;
+    font-size: 14px; color: #1c1c1c; outline: none; width: 100%; font-family: inherit;
+  }
+  .menu-search input::placeholder { color: #bbb; }
+
+  /* ── VEG TOGGLE ── */
+  .filter-row {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 1.5rem; flex-wrap: wrap;
+  }
+  .veg-toggle {
+    display: flex; align-items: center; gap: 8px;
+    background: #fff; border: 1.5px solid #e0e0e0;
+    border-radius: 8px; padding: 8px 14px; cursor: pointer;
+    font-size: 13px; font-weight: 500; color: #555;
+    transition: border-color 0.15s;
+  }
+  .veg-toggle:hover { border-color: #0f8a0f; color: #0f8a0f; }
+  .veg-dot { width: 12px; height: 12px; border-radius: 50%; background: #0f8a0f; }
+  .filter-badge {
+    display: flex; align-items: center; gap: 6px;
+    background: #fff5f0; border: 1.5px solid #fc4b08;
+    border-radius: 8px; padding: 8px 14px;
+    font-size: 13px; font-weight: 500; color: #fc4b08;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #1c1c1c; color: #aaa;
+    text-align: center; padding: 1.5rem;
+    font-size: 13px; margin-top: 2rem;
+  }
+  footer span { color: #fc4b08; }
+
+  /* ── OFFER STRIP ── */
+  .offer-strip {
+    background: linear-gradient(135deg, #fff5f0, #fff);
+    border: 1px solid #ffe0d0; border-radius: 12px;
+    padding: 12px 16px; margin-bottom: 1.5rem;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .offer-strip-icon { font-size: 22px; }
+  .offer-strip-text { font-size: 13px; font-weight: 600; color: #fc4b08; }
+  .offer-strip-sub { font-size: 11px; color: #888; font-weight: 400; margin-top: 2px; }
+</style>
+</head>
+<body>
+
+<!-- ── NAVBAR ── -->
+<nav>
+  <a href="index.jsp" class="nav-logo"><span>🍽</span> FoodDash</a>
+
+  <a href="index.jsp" class="nav-back">
+    <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+      <polyline points="15 18 9 12 15 6"/>
+    </svg>
+    Back to Restaurants
+  </a>
+
+  <button class="nav-cart-btn">
+    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+      <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+    </svg>
+    My Cart
+    <div class="cart-count">2</div>
+  </button>
+</nav>
+
+<!-- ── RESTAURANT BANNER ── -->
+<div class="restaurant-banner">
+  <div class="banner-img-wrap">
+    <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1200&h=400&fit=crop&auto=format" alt="Spice Garden Restaurant">
+    <div class="banner-overlay">
+      <div class="banner-info">
+        <h1>Spice Garden</h1>
+        <div class="banner-cuisine">North Indian · Mughlai · Biryani · Kebabs</div>
+        <div class="banner-meta">
+          <div class="banner-rating">★ 4.5 (1.2K ratings)</div>
+          <div class="bmeta-item">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+            28–35 mins
+          </div>
+          <div class="bmeta-item">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <line x1="6" y1="4" x2="18" y2="4"/><line x1="6" y1="10" x2="18" y2="10"/>
+              <path d="M6 4h6a6 6 0 0 1 0 12l6 4H6"/>
+            </svg>
+            ₹250 for two
+          </div>
+          <div class="bmeta-item">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+            Koramangala, Bengaluru
+          </div>
+          <div class="banner-open-badge open">● Open Now</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── CATEGORY NAV ── -->
+<div class="cat-nav">
+  <a href="#starters" class="cat-nav-item active">🥗 Starters</a>
+  <a href="#breads" class="cat-nav-item">🫓 Breads</a>
+  <a href="#mains" class="cat-nav-item">🍛 Main Course</a>
+  <a href="#biryani" class="cat-nav-item">🍚 Biryani</a>
+  <a href="#kebabs" class="cat-nav-item">🍢 Kebabs</a>
+  <a href="#desserts" class="cat-nav-item">🍮 Desserts</a>
+  <a href="#beverages" class="cat-nav-item">🥤 Beverages</a>
+</div>
+
+<!-- ── PAGE LAYOUT ── -->
+<div class="page-layout">
+
+  <!-- ── LEFT: MENU ── -->
+  <div class="menu-col">
+
+    <!-- Search -->
+    <div class="menu-search-wrap">
+      <div class="menu-search">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+        <input type="text" placeholder="Search within menu...">
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="filter-row">
+      <div class="veg-toggle"><div class="veg-dot"></div> Veg Only</div>
+      <div class="filter-badge">🔥 Bestsellers</div>
+      <div class="filter-badge">⭐ Top Rated</div>
+    </div>
+
+    <!-- Offer strip -->
+    <div class="offer-strip">
+      <div class="offer-strip-icon">🏷️</div>
+      <div>
+        <div class="offer-strip-text">50% OFF up to ₹100 on your first order</div>
+        <div class="offer-strip-sub">Use code FIRST50 · Min order ₹199</div>
+      </div>
+    </div>
+
+    <!-- ── STARTERS ── -->
+    <div class="menu-section" id="starters">
+      <div class="menu-section-title">
+        <span>🥗</span> Starters
+        <span class="section-count">6 items</span>
+      </div>
+
+      <!-- Item 1 -->
+      <div class="menu-item">
+        <div class="menu-item-body">
+          <div class="menu-item-top">
+            <div class="veg-badge veg"></div>
+            <div class="bestseller-tag">Bestseller</div>
+            <div class="menu-item-name">Paneer Tikka</div>
+            <div class="menu-item-desc">Tender cottage cheese cubes marinated in spiced yogurt, grilled in tandoor to perfection. Served with mint chutney.</div>
+          </div>
+          <div class="menu-item-bottom">
+            <div>
+              <div class="menu-item-price">₹249</div>
+              <div class="menu-item-rating">
+                <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                4.6 (340)
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="menu-item-img-wrap">
+          <img src="https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?w=280&h=280&fit=crop&auto=format" alt="Paneer Tikka">
+          <button class="add-btn">ADD +</button>
+        </div>
+      </div>
+
+      <!-- Item 2 -->
+      <div class="menu-item">
+        <div class="menu-item-body">
+          <div class="menu-item-top">
+            <div class="veg-badge non-veg"></div>
+            <div class="spicy-tag">🌶 Spicy</div>
+            <div class="menu-item-name">Chicken 65</div>
+            <div class="menu-item-desc">Deep-fried spicy chicken with curry leaves, red chilli, and a tangy yogurt marinade. A South Indian classic.</div>
+          </div>
+          <div class="menu-item-bottom">
+            <div>
+              <div class="menu-item-price">₹299</div>
+              <div class="menu-item-rating">
+                <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                4.7 (520)
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="menu-item-img-wrap">
+          <img src="https://images.unsplash.com/photo-1610057099431-d73a1c9d2f2f?w=280&h=280&fit=crop&auto=format" alt="Chicken 65">
+          <button class="add-btn">ADD +</button>
+        </div>
+      </div>
+
+      <!-- Item 3 -->
+      <div class="menu-item">
+        <div class="menu-item-body">
+          <div class="menu-item-top">
+            <div class="veg-badge veg"></div>
+            <div class="menu-item-name">Hara Bhara Kabab</div>
+            <div class="menu-item-desc">Green patties made with spinach, peas, and potatoes, pan-fried until crispy. Served with tamarind chutney.</div>
+          </div>
+          <div class="menu-item-bottom">
+            <div>
+              <div class="menu-item-price">₹199</div>
+              <div class="menu-item-rating">
+                <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                4.3 (210)
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="menu-item-img-wrap">
+          <div class="menu-item-img-placeholder">🥬</div>
+          <button class="add-btn">ADD +</button>
+        </div>
+      </div>
+
+      <!-- Item 4 -->
+      <div class="menu-item">
+        <div class="menu-item-body">
+          <div class="menu-item-top">
+            <div class="veg-badge non-veg"></div>
+            <div class="bestseller-tag">Bestseller</div>
+            <div class="menu-item-name">Seekh Kebab</div>
+            <div class="menu-item-desc">Minced lamb and chicken mixed with spices, skewered and grilled in the tandoor. Smoky and juicy.</div>
+          </div>
+          <div class="menu-item-bottom">
+            <div>
+              <div class="menu-item-price">₹349</div>
+              <div class="menu-item-rating">
+                <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                4.8 (680)
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="menu-item-img-wrap">
+          <img src="https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?w=280&h=280&fit=crop&auto=format" alt="Seekh Kebab">
+          <button class="add-btn">ADD +</button>
+        </div>
+      </div>
+
+    </div><!-- /starters -->
+
+    <!-- ── BREADS ── -->
+    <div class="menu-section" id="breads">
+      <div class="menu-section-title">
+        <span>🫓</span> Breads
+        <span class="section-count">4 items</span>
+      </div>
+
+      <div class="menu-item">
+        <div class="menu-item-body">
+          <div class="menu-item-top">
+            <div class="veg-badge veg"></div>
+            <div class="menu-item-name">Butter Naan</div>
+            <div class="menu-item-desc">Soft, fluffy leavened flatbread baked in a tandoor, finished with a generous spread of butter.</div>
+          </div>
+          <div class="menu-item-bottom">
+            <div>
+              <div class="menu-item-price">₹59</div>
+              <div class="menu-item-rating">
+                <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                4.4 (890)
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="menu-item-img-wrap">
+          <div class="menu-item-img-placeholder">🫓</div>
+          <button class="add-btn">ADD +</button>
+        </div>
+      </div>
+
+      <div class="menu-item">
+        <div class="menu-item-body">
+          <div class="menu-item-top">
+            <div class="veg-badge veg"></div>
+            <div class="bestseller-tag">Bestseller</div>
+            <div class="menu-item-name">Garlic Naan</div>
+            <div class="menu-item-desc">Naan topped with minced garlic and fresh coriander, baked golden in the tandoor. Irresistibly aromatic.</div>
+          </div>
+          <div class="menu-item-bottom">
+            <div>
+              <div class="menu-item-price">₹79</div>
+              <div class="menu-item-rating">
+                <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                4.7 (1.1K)
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="menu-item-img-wrap">
+          <div class="menu-item-img-placeholder">🧄</div>
+          <button class="add-btn">ADD +</button>
+        </div>
+      </div>
+
+    </div><!-- /breads -->
+
+    <!-- ── MAIN COURSE ── -->
+    <div class="menu-section" id="mains">
+      <div class="menu-section-title">
+        <span>🍛</span> Main Course
+        <span class="section-count">8 items</span>
+      </div>
+
+      <div class="menu-item">
+        <div class="menu-item-body">
+          <div class="menu-item-top">
+            <div class="veg-badge non-veg"></div>
+            <div class="bestseller-tag">Bestseller</div>
+            <div class="menu-item-name">Butter Chicken</div>
+            <div class="menu-item-desc">Tender chicken pieces simmered in a rich, creamy tomato-based sauce with aromatic spices and butter.</div>
+          </div>
+          <div class="menu-item-bottom">
+            <div>
+              <div class="menu-item-price">₹349</div>
+              <div class="menu-item-rating">
+                <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                4.8 (2.3K)
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="menu-item-img-wrap">
+          <img src="https://images.unsplash.com/photo-1588166524941-3bf61a9c41db?w=280&h=280&fit=crop&auto=format" alt="Butter Chicken">
+          <button class="add-btn">ADD +</button>
+        </div>
+      </div>
+
+      <div class="menu-item">
+        <div class="menu-item-body">
+          <div class="menu-item-top">
+            <div class="veg-badge veg"></div>
+            <div class="menu-item-name">Paneer Butter Masala</div>
+            <div class="menu-item-desc">Soft paneer cubes in a velvety, mildly spiced tomato and cashew gravy. A vegetarian favourite.</div>
+          </div>
+          <div class="menu-item-bottom">
+            <div>
+              <div class="menu-item-price">₹299</div>
+              <div class="menu-item-rating">
+                <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                4.6 (1.4K)
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="menu-item-img-wrap">
+          <img src="https://images.unsplash.com/photo-1631452180519-c014fe946bc7?w=280&h=280&fit=crop&auto=format" alt="Paneer Butter Masala">
+          <button class="add-btn">ADD +</button>
+        </div>
+      </div>
+
+      <div class="menu-item">
+        <div class="menu-item-body">
+          <div class="menu-item-top">
+            <div class="veg-badge non-veg"></div>
+            <div class="spicy-tag">🌶 Spicy</div>
+            <div class="menu-item-name">Mutton Rogan Josh</div>
+            <div class="menu-item-desc">Classic Kashmiri slow-cooked mutton curry with whole spices, dried Kashmiri chillies and aromatic fennel. Deeply flavourful.</div>
+          </div>
+          <div class="menu-item-bottom">
+            <div>
+              <div class="menu-item-price">₹449</div>
+              <div class="menu-item-rating">
+                <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                4.9 (760)
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="menu-item-img-wrap">
+          <div class="menu-item-img-placeholder">🍖</div>
+          <button class="add-btn">ADD +</button>
+        </div>
+      </div>
+
+      <div class="menu-item">
+        <div class="menu-item-body">
+          <div class="menu-item-top">
+            <div class="veg-badge veg"></div>
+            <div class="menu-item-name">Dal Makhani</div>
+            <div class="menu-item-desc">Black lentils slow-cooked overnight with butter, cream, and a medley of spices. Smoky and comforting.</div>
+          </div>
+          <div class="menu-item-bottom">
+            <div>
+              <div class="menu-item-price">₹249</div>
+              <div class="menu-item-rating">
+                <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                4.5 (980)
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="menu-item-img-wrap">
+          <div class="menu-item-img-placeholder">🫕</div>
+          <button class="add-btn">ADD +</button>
+        </div>
+      </div>
+
+    </div><!-- /mains -->
+
+    <!-- ── BIRYANI ── -->
+    <div class="menu-section" id="biryani">
+      <div class="menu-section-title">
+        <span>🍚</span> Biryani
+        <span class="section-count">5 items</span>
+      </div>
+
+      <div class="menu-item">
+        <div class="menu-item-body">
+          <div class="menu-item-top">
+            <div class="veg-badge non-veg"></div>
+            <div class="bestseller-tag">Bestseller</div>
+            <div class="menu-item-name">Hyderabadi Chicken Dum Biryani</div>
+            <div class="menu-item-desc">Basmati rice layered with spiced chicken and slow-cooked dum style with saffron, fried onions, and fresh mint. Served with raita.</div>
+          </div>
+          <div class="menu-item-bottom">
+            <div>
+              <div class="menu-item-price">₹399</div>
+              <div class="menu-item-rating">
+                <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                4.9 (3.1K)
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="menu-item-img-wrap">
+          <img src="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=280&h=280&fit=crop&auto=format" alt="Chicken Biryani">
+          <button class="add-btn">ADD +</button>
+        </div>
+      </div>
+
+      <div class="menu-item">
+        <div class="menu-item-body">
+          <div class="menu-item-top">
+            <div class="veg-badge veg"></div>
+            <div class="menu-item-name">Veg Dum Biryani</div>
+            <div class="menu-item-desc">Fragrant basmati rice cooked with seasonal vegetables, whole spices, and fresh herbs. Light yet satisfying.</div>
+          </div>
+          <div class="menu-item-bottom">
+            <div>
+              <div class="menu-item-price">₹299</div>
+              <div class="menu-item-rating">
+                <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                4.3 (870)
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="menu-item-img-wrap">
+          <div class="menu-item-img-placeholder">🍚</div>
+          <button class="add-btn">ADD +</button>
+        </div>
+      </div>
+
+      <div class="menu-item">
+        <div class="menu-item-body">
+          <div class="menu-item-top">
+            <div class="veg-badge non-veg"></div>
+            <div class="spicy-tag">🌶 Spicy</div>
+            <div class="menu-item-name">Mutton Biryani</div>
+            <div class="menu-item-desc">Slow-cooked tender mutton pieces with long-grain basmati rice, caramelised onions, and aromatic whole spices.</div>
+          </div>
+          <div class="menu-item-bottom">
+            <div>
+              <div class="menu-item-price">₹499</div>
+              <div class="menu-item-rating">
+                <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                4.8 (1.5K)
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="menu-item-img-wrap">
+          <div class="menu-item-img-placeholder">🍖</div>
+          <button class="add-btn">ADD +</button>
+        </div>
+      </div>
+
+    </div><!-- /biryani -->
+
+    <!-- ── DESSERTS ── -->
+    <div class="menu-section" id="desserts">
+      <div class="menu-section-title">
+        <span>🍮</span> Desserts
+        <span class="section-count">4 items</span>
+      </div>
+
+      <div class="menu-item">
+        <div class="menu-item-body">
+          <div class="menu-item-top">
+            <div class="veg-badge veg"></div>
+            <div class="bestseller-tag">Bestseller</div>
+            <div class="menu-item-name">Gulab Jamun</div>
+            <div class="menu-item-desc">Soft, melt-in-the-mouth milk solid dumplings soaked in rose-cardamom sugar syrup. Served warm.</div>
+          </div>
+          <div class="menu-item-bottom">
+            <div>
+              <div class="menu-item-price">₹99</div>
+              <div class="menu-item-rating">
+                <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                4.7 (1.8K)
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="menu-item-img-wrap">
+          <div class="menu-item-img-placeholder">🍮</div>
+          <button class="add-btn">ADD +</button>
+        </div>
+      </div>
+
+      <div class="menu-item">
+        <div class="menu-item-body">
+          <div class="menu-item-top">
+            <div class="veg-badge veg"></div>
+            <div class="menu-item-name">Kulfi Falooda</div>
+            <div class="menu-item-desc">Creamy traditional kulfi on a bed of rose-flavoured falooda noodles, topped with basil seeds and rose syrup.</div>
+          </div>
+          <div class="menu-item-bottom">
+            <div>
+              <div class="menu-item-price">₹149</div>
+              <div class="menu-item-rating">
+                <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                4.6 (720)
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="menu-item-img-wrap">
+          <div class="menu-item-img-placeholder">🍦</div>
+          <button class="add-btn">ADD +</button>
+        </div>
+      </div>
+
+    </div><!-- /desserts -->
+
+    <!-- ── BEVERAGES ── -->
+    <div class="menu-section" id="beverages">
+      <div class="menu-section-title">
+        <span>🥤</span> Beverages
+        <span class="section-count">5 items</span>
+      </div>
+
+      <div class="menu-item">
+        <div class="menu-item-body">
+          <div class="menu-item-top">
+            <div class="veg-badge veg"></div>
+            <div class="bestseller-tag">Bestseller</div>
+            <div class="menu-item-name">Mango Lassi</div>
+            <div class="menu-item-desc">Chilled blended yogurt with fresh Alphonso mangoes and a touch of cardamom. Thick and refreshing.</div>
+          </div>
+          <div class="menu-item-bottom">
+            <div>
+              <div class="menu-item-price">₹129</div>
+              <div class="menu-item-rating">
+                <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                4.8 (950)
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="menu-item-img-wrap">
+          <div class="menu-item-img-placeholder">🥭</div>
+          <button class="add-btn">ADD +</button>
+        </div>
+      </div>
+
+      <div class="menu-item">
+        <div class="menu-item-body">
+          <div class="menu-item-top">
+            <div class="veg-badge veg"></div>
+            <div class="menu-item-name">Masala Chaas</div>
+            <div class="menu-item-desc">Salted buttermilk blended with roasted cumin, fresh coriander, green chilli, and ginger. Perfect summer cooler.</div>
+          </div>
+          <div class="menu-item-bottom">
+            <div>
+              <div class="menu-item-price">₹79</div>
+              <div class="menu-item-rating">
+                <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                4.4 (430)
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="menu-item-img-wrap">
+          <div class="menu-item-img-placeholder">🥛</div>
+          <button class="add-btn">ADD +</button>
+        </div>
+      </div>
+
+    </div><!-- /beverages -->
+
+  </div><!-- /menu-col -->
+
+  <!-- ── RIGHT: CART PANEL ── -->
+  <div class="cart-panel">
+    <div class="cart-header">
+      <div>
+        <h3>Your Order</h3>
+        <div class="cart-restaurant">Spice Garden</div>
+      </div>
+    </div>
+
+    <!-- Sample cart items (static demo) -->
+    <div class="cart-items">
+      <div class="cart-item">
+        <div class="cart-item-name">Paneer Tikka</div>
+        <div class="cart-item-qty">
+          <button class="cq-btn">−</button>
+          <span class="cq-num">1</span>
+          <button class="cq-btn">+</button>
+        </div>
+        <div class="cart-item-price">₹249</div>
+      </div>
+      <div class="cart-item">
+        <div class="cart-item-name">Butter Chicken</div>
+        <div class="cart-item-qty">
+          <button class="cq-btn">−</button>
+          <span class="cq-num">1</span>
+          <button class="cq-btn">+</button>
+        </div>
+        <div class="cart-item-price">₹349</div>
+      </div>
+    </div>
+
+    <div class="cart-summary">
+      <div class="summary-row"><span>Item Total</span><span>₹598</span></div>
+      <div class="summary-row"><span>Delivery Fee</span><span>₹39</span></div>
+      <div class="summary-row"><span>Taxes & Charges</span><span>₹29</span></div>
+      <div class="summary-row">
+        <span style="color:#0f8a0f; font-weight:600;">Discount (FIRST50)</span>
+        <span style="color:#0f8a0f; font-weight:600;">− ₹100</span>
+      </div>
+      <div class="summary-row total"><span>To Pay</span><span>₹566</span></div>
+    </div>
+
+    <button class="checkout-btn">Proceed to Checkout →</button>
+    <div class="custom-note">Review your order · Prices are inclusive of taxes</div>
+  </div>
+
+</div><!-- /page-layout -->
+
+<footer>
+  Made with <span>♥</span> by FoodDash &nbsp;·&nbsp; © 2026 FoodDash. All rights reserved.
+</footer>
+
+</body>
+</html>
