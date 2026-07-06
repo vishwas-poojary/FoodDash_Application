@@ -21,6 +21,8 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            position: relative;
+            overflow-x: hidden;
         }
 
         /* ── NAVBAR (matches reference) ── */
@@ -176,6 +178,7 @@
             align-items: center;
             justify-content: center;
             padding: 2rem;
+            position: relative;
         }
 
         .login-container {
@@ -186,6 +189,8 @@
             padding: 2.25rem 2.5rem 2.5rem;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
             border: 1px solid #f0f0f0;
+            position: relative;
+            z-index: 2;
         }
 
         .login-container .form-title {
@@ -365,6 +370,8 @@
             padding: 1.5rem;
             font-size: 13px;
             margin-top: auto;
+            position: relative;
+            z-index: 2;
         }
         footer span {
             color: #fc4b08;
@@ -436,6 +443,95 @@
                 padding: 12px;
             }
         }
+
+        /* ══════════════════════════════════════════════
+           ADDED: FOOD-DELIVERY BACKGROUND ANIMATION
+           (purely decorative, sits behind main-wrap only,
+           does not touch nav/header/footer/form logic)
+           ══════════════════════════════════════════════ */
+        .food-bg {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .food-bg .drift {
+            position: absolute;
+            top: -10%;
+            font-size: 34px;
+            opacity: 0.16;
+            animation: driftFall linear infinite;
+            will-change: transform;
+        }
+
+        @keyframes driftFall {
+            0% {
+                transform: translateY(-10vh) translateX(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(55vh) translateX(30px) rotate(180deg);
+            }
+            100% {
+                transform: translateY(120vh) translateX(-20px) rotate(360deg);
+            }
+        }
+
+        .food-bg .rider {
+            position: absolute;
+            bottom: 8%;
+            font-size: 40px;
+            opacity: 0.14;
+            animation: rideAcross 14s linear infinite;
+            will-change: transform;
+        }
+
+        @keyframes rideAcross {
+            0% {
+                left: -10%;
+                transform: scaleX(1);
+            }
+            49% {
+                transform: scaleX(1);
+            }
+            50% {
+                left: 110%;
+                transform: scaleX(-1);
+            }
+            99% {
+                transform: scaleX(-1);
+            }
+            100% {
+                left: -10%;
+                transform: scaleX(1);
+            }
+        }
+
+        .food-bg .pulse-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 600px;
+            height: 600px;
+            margin: -300px 0 0 -300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(252, 75, 8, 0.06) 0%, rgba(252, 75, 8, 0) 70%);
+            animation: pulseGlow 6s ease-in-out infinite;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.15); opacity: 1; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .food-bg .drift,
+            .food-bg .rider,
+            .food-bg .pulse-ring {
+                animation: none;
+            }
+        }
     </style>
 </head>
 <body>
@@ -485,6 +581,21 @@
 
     <!-- ─── LOGIN FORM ─── -->
     <div class="main-wrap">
+
+        <!-- ADDED: decorative food-delivery background animation -->
+        <div class="food-bg">
+            <div class="pulse-ring"></div>
+            <div class="drift" style="left:6%; animation-duration:16s; animation-delay:0s;">🍕</div>
+            <div class="drift" style="left:18%; animation-duration:20s; animation-delay:2s; font-size:26px;">🍔</div>
+            <div class="drift" style="left:32%; animation-duration:14s; animation-delay:4s;">🍟</div>
+            <div class="drift" style="left:48%; animation-duration:22s; animation-delay:1s; font-size:28px;">🥤</div>
+            <div class="drift" style="left:62%; animation-duration:17s; animation-delay:3s;">🍩</div>
+            <div class="drift" style="left:76%; animation-duration:19s; animation-delay:5s; font-size:30px;">🌮</div>
+            <div class="drift" style="left:88%; animation-duration:15s; animation-delay:2.5s;">🍣</div>
+            <div class="drift" style="left:40%; animation-duration:24s; animation-delay:6s; font-size:24px;">🥗</div>
+            <div class="rider">🛵</div>
+        </div>
+
         <div class="login-container">
 
             <div class="form-title">Log In</div>
